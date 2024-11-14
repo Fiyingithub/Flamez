@@ -1,5 +1,4 @@
 import React from 'react'
-import Banner3 from '../Assets/Images/Banner-3.jpg';
 import { FaStar } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import { ImArrowRight } from "react-icons/im";

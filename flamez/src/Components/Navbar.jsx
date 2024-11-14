@@ -42,9 +42,9 @@ const Navbar = () => {
             🔥Flamez
           </Link>
 
-          <div className="space-x-10 text-lg items-center hidden lg:block">
+          <div className="space-x-10 text-lg  items-center hidden lg:flex">
             {navItems.map((item, index) => (
-              <>
+              <div key={index}>
                 {item.redirectPage === true ? (
                   <>
                     <Link  to={item.path} className="hover:opacity-70">
@@ -56,7 +56,7 @@ const Navbar = () => {
                     {item.title}
                   </a>
                 )}
-              </>
+              </div>
             ))}
           </div>
 
