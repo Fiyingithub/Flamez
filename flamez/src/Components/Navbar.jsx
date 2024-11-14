@@ -38,7 +38,7 @@ const Navbar = () => {
     <div>
       <nav className="bg-primary text-white z-50 fixed w-full py-4">
         <div className="flex justify-between items-center mx-auto container px-4 md:px-10 max-w-[1250px]">
-          <Link to={"/"} className="text-4xl font-allison">
+          <Link to={"/"} className="text-4xl font-nunito">
             🔥Flamez
           </Link>
 

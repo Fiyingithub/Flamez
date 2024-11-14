@@ -32,7 +32,7 @@ const Footer = () => {
         <div className="flex flex-col justify-between sm:flex-row mx-auto container px-4 max-w-[1200px] flex-wrap">
           <Link
             to="/"
-            className="text-white text-3xl lg:text-5xl font-allison font-semibold"
+            className="text-white text-3xl lg:text-4xl font-poppins font-semibold"
           >
             🔥Flamez
           </Link>

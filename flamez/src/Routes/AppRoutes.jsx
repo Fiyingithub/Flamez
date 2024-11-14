@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import {Home, Recipie, RecipieDetails} from '../Pages';
+import {Home, Recipie, RecipieDetails} from '../Pages/Index';
 
 const AppRoutes = () => {
   return (
