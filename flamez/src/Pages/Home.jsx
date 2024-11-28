@@ -47,7 +47,7 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <section className="gradient pt-10 md:pt-24 z-0 h-auto lg:h-screen">
+      <section className="gradient pt-10 px-4 md:py-24 z-0 h-auto">
         <div className="mx-auto container py-10 px-4 md:px-10 lg:px-4 max-w-[1200px] flex flex-col lg:flex-row gap-12 lg:items-center">
           <div className="flex pt-14 text-white flex-col space-y-10 w-full lg:w-1/2">
             <p className="text-3xl lg:text-5xl font-poppins font-semibold">
