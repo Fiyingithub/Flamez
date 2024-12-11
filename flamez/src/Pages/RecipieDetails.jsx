@@ -14,7 +14,7 @@ const RecipieDetails = () => {
     const fetchRecipeData = async () => {
       try {
         const response = await axios.get(
-          `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
+          `https://lascoo.codeweborganization.com.ng/api/Loan/GetLoanByMemberId/?id=${id}`
         );
         console.log({ RecipeData: response.data.meals });
         setRecipeDetails(response.data.meals);
