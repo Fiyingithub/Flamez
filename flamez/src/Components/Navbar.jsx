@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { CiMenuFries } from "react-icons/ci";
 import { MdRestaurantMenu } from "react-icons/md";
 
-
 const navItems = [
   {
     title: "Home",
@@ -30,9 +29,9 @@ const navItems = [
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const menuHandleClick =()=>{
-    setMenuOpen(!menuOpen)
-  }
+  const menuHandleClick = () => {
+    setMenuOpen(!menuOpen);
+  };
 
   return (
     <div>
@@ -47,12 +46,12 @@ const Navbar = () => {
               <div key={index}>
                 {item.redirectPage === true ? (
                   <>
-                    <Link  to={item.path} className="hover:opacity-70">
+                    <Link to={item.path} className="hover:opacity-70">
                       {item.title}
                     </Link>
                   </>
                 ) : (
-                  <a key={index} href={item.path} className="hover:opacity-70">
+                  <a href={item.path} className="hover:opacity-70">
                     {item.title}
                   </a>
                 )}
@@ -88,12 +87,12 @@ export const MobileNavbar = () => {
           <div key={index}>
             {item.redirectPage === true ? (
               <>
-                <Link key={index} to={item.path} className="hover:opacity-70">
+                <Link to={item.path} className="hover:opacity-70">
                   {item.title}
                 </Link>
               </>
             ) : (
-              <a key={index} href={item.path} className="hover:opacity-70">
+              <a href={item.path} className="hover:opacity-70">
                 {item.title}
               </a>
             )}

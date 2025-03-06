@@ -6,6 +6,7 @@ import { ImArrowRight } from "react-icons/im";
 
 
 const RecipieCard = ({strMeal, strMealThumb, idMeal}) => {
+
   return (
     <>
       <div className="pb-6 w-full lg:w-72 mt-10 rounded-t-2xl shadow-md  hover:shadow-xl">

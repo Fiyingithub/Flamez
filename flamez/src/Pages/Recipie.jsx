@@ -4,25 +4,44 @@ import Footer from "../Components/Footer";
 import { IoSearchOutline } from "react-icons/io5";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
 import RecipieCard from "../Components/RecipieCard";
-import axios from 'axios';
+import { useQuery } from "@tanstack/react-query";
+import { handleDataSearch } from "../Services/Api";
 
 const Recipie = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  const [searchData, setSearchData] = useState("");
-  const [searchResult, setSearchResult] = useState([]);
-  const handleDataSearch = async() => {
-    try {
-      const response = await axios.get(
-        `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchData}`
-      );
-      console.log(response.data);
-      setSearchResult(response.data);
-    } catch (error) {
-      console.error(error);
+
+  const [searchQuery, setSearchQuery] = useState(""); // ✅ Fix: Track search input
+
+  // Fetch data using React Query
+  const { data: searchData, isLoading, error, refetch } = useQuery({
+    queryKey: ["searchData", searchQuery], 
+    queryFn: () => handleDataSearch(searchQuery),
+    enabled: false, // ✅ Prevent auto-fetching on mount
+    refetchInterval: 30000,
+    refetchIntervalInBackground: true,
+  });
+
+  // Handle search submission
+  const handleSearch = () => {
+    if (searchQuery.trim() !== "") {
+      refetch(); // ✅ Trigger fetch when search button is clicked
     }
   };
+
+  if (error) {
+    return (
+      <div>
+        <Navbar />
+        <div className="flex justify-center items-center">
+          <p className="text-red-500">Error: {error.message}</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <>
       <Navbar />
@@ -33,21 +52,19 @@ const Recipie = () => {
               Search, See, Practice, Enjoy
             </p>
             <p className="opacity-70">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat
-              repellat beatae explicabo maxime dolores numquam in nihil totam
-              unde quisquam officiis ratione, harum rerum impedit ut mollitia
-              deleniti perspiciatis quasi.
+              Discover thousands of recipes, cook delicious meals, and enjoy
+              homemade food like never before!
             </p>
-            <div className="flex w-full items-cente space-x-2">
+            <div className="flex w-full items-center space-x-2">
               <input
                 type="text"
                 className="w-[90%] py-3 bg-[#ffffff20] text-white rounded-2xl px-5 focus:outline-none placeholder:text-[#ffffff90]"
                 placeholder="Search for Recipe"
-                value={searchData}
-                onChange={(e) => setSearchData(e.target.value)}
+                value={searchQuery} // ✅ Controlled input
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
               <button
-                onClick={handleDataSearch}
+                onClick={handleSearch} // ✅ Correct function
                 className="bg-black px-4 py-3 rounded-2xl"
               >
                 <IoSearchOutline className="text-2xl" />
@@ -60,19 +77,24 @@ const Recipie = () => {
         </div>
       </section>
 
+      {/* Search Results */}
       <section className="my-20">
         <div className="mx-auto container px-4 max-w-[1200px] flex flex-col space-y-10">
           <p className="text-2xl font-semibold opacity-85">Search Result</p>
-          <div className="flex flex-col gap-x-10 gap-y-5 mx-auto flex-wrap sm:flex-row">
-            {
-              searchResult?.meals?.map((item, index) => (
-                <RecipieCard
-                  key={index}
-                  {...item}
-                />
-              ))
-            }
+          {isLoading ? (
+            <div className="flex flex-col justify-center items-center">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"> </div>
+            <p className="text-2xl font-semibold mt-6 text-red-700">Loading...</p>
           </div>
+          ) : searchData?.meals?.length > 0 ? (
+            <div className="flex flex-col gap-x-10 gap-y-5 mx-auto flex-wrap sm:flex-row">
+              {searchData?.meals?.map((item, index) => (
+                <RecipieCard key={index} {...item} />
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-gray-500">No recipes found.</p>
+          )}
         </div>
       </section>
       <Footer />

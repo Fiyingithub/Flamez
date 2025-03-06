@@ -4,45 +4,60 @@ import Banner from "../Assets/Images/Assorted meat.webp";
 import CategoriesCard from "../Components/CategoriesCard";
 import RecipieCard from "../Components/RecipieCard";
 import Footer from "../Components/Footer";
-import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import { fetchData, fetchPopularData } from "../Services/Api";
 
 const Home = () => {
-  const [recipeCategory, setRecipeCategory] = useState([]);
-  const [popularRecipe, setPopularRecipe] = useState([]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const [displayedItems, setDisplayedItems] = useState(6);
 
   const loadMore = () => setDisplayedItems((prev) => prev + 6);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://www.themealdb.com/api/json/v1/1/categories.php"
-        );
-        console.log(response.data.categories);
-        setRecipeCategory(response.data.categories);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const {
+    data: recipeCategory,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["recipe"],
+    queryFn: fetchData, // Pass the function reference, NOT fetchData()
+    refetchInterval: 30000,
+    refetchIntervalInBackground: true,
+  });
 
-    fetchData();
+  const {
+    data: popularRecipe,
+    isLoading: isLoadingPopular,
+    error: errorPopular,
+  } = useQuery({
+    queryKey: ["popularRecipe"],
+    queryFn: fetchPopularData, // Pass the function reference, NOT fetchPopularData()
+    refetchInterval: 30000,
+    refetchIntervalInBackground: true,
 
-    const fetchPopularData = async () => {
-      try {
-        const response = await axios.get(
-          "https://www.themealdb.com/api/json/v1/1/search.php?f=a"
-        );
-        console.log({ popularData: response.data.meals });
-        setPopularRecipe(response.data.meals);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  });
 
-    fetchPopularData();
-  }, []);
+  // Handle errors
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+  if (errorPopular) {
+    return <div>Error: {errorPopular.message}</div>;
+  }
+
+  // Handle loading states
+  if (isLoading || isLoadingPopular) {
+    return <div>
+      <Navbar />
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"> </div>
+      </div>
+      <Footer/>
+    </div>;
+  }
+
 
   return (
     <>
@@ -85,7 +100,7 @@ const Home = () => {
             natus magnam
           </p>
           <div className="flex flex-col flex-wrap gap-x-20 gap-y-5 sm:flex-row">
-            {recipeCategory.slice(0, displayedItems).map((item, index) => (
+            {recipeCategory?.slice(0, displayedItems).map((item, index) => (
               <CategoriesCard key={index} {...item} />
             ))}
           </div>
@@ -109,7 +124,7 @@ const Home = () => {
           </p>
         </div>
         <div className="max-w-[1200px] px-6 flex flex-col gap-x-10 gap-y-5 mx-auto sm:flex-row">
-          {popularRecipe.map((item, index) => (
+          {popularRecipe?.map((item, index) => (
             <RecipieCard key={index} {...item} />
           ))}
         </div>
